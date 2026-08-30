@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Calculadora de Subredes IPv4 y CIDR | Máscara, Hosts y Broadcast</title>
+
+    <meta
+        name="description"
+        content="Calculadora gratuita de subredes IPv4 y CIDR. Obtén la dirección de red, máscara de subred, wildcard, broadcast, rango de hosts y número de direcciones."
+    >
+
+    <meta
+        name="robots"
+        content="index, follow"
+    >
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+</head>
+
+<body>
+
+    <main class="container">
+
+        <!-- =====================================================
+             CABECERA
+             ===================================================== -->
+
+        <header class="page-header">
+
+            <h1>Calculadora de Subredes IPv4</h1>
+
+            <p>
+                Calcula rápidamente la dirección de red, máscara de subred,
+                wildcard, broadcast y rango de hosts de cualquier red IPv4.
+            </p>
+
+        </header>
+
+
+        <!-- =====================================================
+             NAVEGACIÓN ENTRE HERRAMIENTAS
+             ===================================================== -->
+
+        <nav
+            class="tools-navigation"
+            aria-label="Herramientas"
+        >
+
+            <a href="https://calculadora-camaras.pages.dev/">
+                Calculadora de cámaras
+            </a>
+
+            <a href="https://calculadora-camaras.pages.dev/subredes/">
+                Calculadora de subredes
+            </a>
+
+        </nav>
+
+
+        <!-- =====================================================
+             CALCULADORA
+             ===================================================== -->
+
+        <section class="card calculator-card">
+
+            <h2>Calcular una subred IPv4</h2>
+
+            <p class="section-description">
+                Introduce una dirección IPv4 y un prefijo CIDR entre 0 y 32.
+            </p>
+
+
+            <div class="form-group">
+
+                <label for="ip">
+                    Dirección IP
+                </label>
+
+                <input
+                    type="text"
+                    id="ip"
+                    name="ip"
+                    autocomplete="off"
+                    inputmode="decimal"
+                    placeholder="Ejemplo: 192.168.1.50"
+                >
+
+                <small>
+                    Puedes introducir una IP de host o una dirección de red.
+                </small>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="cidr">
+                    Prefijo CIDR
+                </label>
+
+                <input
+                    type="number"
+                    id="cidr"
+                    name="cidr"
+                    min="0"
+                    max="32"
+                    step="1"
+                    autocomplete="off"
+                    placeholder="Ejemplo: 24"
+                >
+
+                <small>
+                    Valor entre 0 y 32.
+                </small>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="calculateBtn"
+                class="calculate-button"
+            >
+                CALCULAR
+            </button>
+
+
+            <div
+                id="errorMessage"
+                class="error-message"
+                role="alert"
+                hidden
+            ></div>
+
+        </section>
+
+
+        <!-- =====================================================
+             EJEMPLOS RÁPIDOS
+             ===================================================== -->
+
+        <section class="card examples-card">
+
+            <h2>Ejemplos rápidos</h2>
+
+            <p class="section-description">
+                Pulsa un ejemplo para rellenar los datos y calcular
+                automáticamente la subred.
+            </p>
+
+
+            <div class="examples-grid">
+
+                <button
+                    type="button"
+                    class="example-button"
+                    data-ip="192.168.1.50"
+                    data-cidr="24"
+                >
+                    192.168.1.50 /24
+                </button>
+
+
+                <button
+                    type="button"
+                    class="example-button"
+                    data-ip="10.0.0.15"
+                    data-cidr="16"
+                >
+                    10.0.0.15 /16
+                </button>
+
+
+                <button
+                    type="button"
+                    class="example-button"
+                    data-ip="172.16.20.100"
+                    data-cidr="27"
+                >
+                    172.16.20.100 /27
+                </button>
+
+
+                <button
+                    type="button"
+                    class="example-button"
+                    data-ip="192.168.1.1"
+                    data-cidr="30"
+                >
+                    192.168.1.1 /30
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             RESULTADOS
+             ===================================================== -->
+
+        <section
+            id="resultsSection"
+            class="card results-card"
+            hidden
+        >
+
+            <h2>Información de la red</h2>
+
+
+            <div class="results-grid">
+
+                <div class="result-item">
+
+                    <span class="result-label">
+                        Dirección de red
+                    </span>
+
+                    <strong id="networkAddress">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="result-item">
+
+                    <span class="result-label">
+                        Máscara de subred
+                    </span>
+
+                    <strong id="subnetMask">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="result-item">
+
+                    <span class="result-label">
+                        Wildcard
+                    </span>
+
+                    <strong id="wildcard">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="result-item">
+
+                    <span class="result-label">
+                        Broadcast
+                    </span>
+
+                    <strong id="broadcast">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="result-item">
+
+                    <span class="result-label">
+                        Primer host
+                    </span>
+
+                    <strong id="firstHost">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="result-item">
+
+                    <span class="result-label">
+                        Último host
+                    </span>
+
+                    <strong id="lastHost">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="result-item">
+
+                    <span class="result-label">
+                        Hosts utilizables
+                    </span>
+
+                    <strong id="usableHosts">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="result-item">
+
+                    <span class="result-label">
+                        Total de direcciones
+                    </span>
+
+                    <strong id="totalAddresses">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="result-item">
+
+                    <span class="result-label">
+                        Prefijo CIDR
+                    </span>
+
+                    <strong id="resultCidr">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="result-item">
+
+                    <span class="result-label">
+                        Tipo de red
+                    </span>
+
+                    <strong id="networkType">
+                        -
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="specialNetworkNote"
+                class="special-network-note"
+                hidden
+            ></div>
+
+        </section>
+
+
+        <!-- =====================================================
+             INFORMACIÓN SEO
+             ===================================================== -->
+
+        <section class="card information-card">
+
+            <h2>¿Qué es una subred IPv4?</h2>
+
+            <p>
+                Una subred IPv4 es una división lógica de una red IP.
+                El prefijo CIDR indica cuántos bits pertenecen a la parte
+                de red y cuántos quedan disponibles para las direcciones
+                de los dispositivos.
+            </p>
+
+            <p>
+                Por ejemplo, una red
+                <strong>192.168.1.0/24</strong>
+                utiliza una máscara
+                <strong>255.255.255.0</strong>
+                y contiene 256 direcciones IPv4 en total.
+            </p>
+
+
+            <h2>¿Qué calcula esta calculadora?</h2>
+
+            <p>
+                A partir de una dirección IPv4 y un prefijo CIDR,
+                la herramienta calcula automáticamente:
+            </p>
+
+            <ul>
+
+                <li>Dirección de red.</li>
+
+                <li>Máscara de subred.</li>
+
+                <li>Wildcard.</li>
+
+                <li>Dirección de broadcast.</li>
+
+                <li>Primer host.</li>
+
+                <li>Último host.</li>
+
+                <li>Número de hosts utilizables.</li>
+
+                <li>Número total de direcciones.</li>
+
+            </ul>
+
+
+            <h2>Ejemplo de una red /24</h2>
+
+            <p>
+                Si introduces
+                <strong>192.168.1.50/24</strong>,
+                la dirección IP pertenece a la red
+                <strong>192.168.1.0/24</strong>.
+            </p>
+
+            <p>
+                En este caso, la red tiene 256 direcciones en total,
+                desde 192.168.1.0 hasta 192.168.1.255.
+                En una red convencional /24, las direcciones de red
+                y broadcast no se asignan a hosts, por lo que quedan
+                254 hosts utilizables.
+            </p>
+
+
+            <h2>¿Qué significa CIDR?</h2>
+
+            <p>
+                CIDR significa
+                <strong>Classless Inter-Domain Routing</strong>.
+                La notación utiliza una barra seguida de un número,
+                como <strong>/24</strong>, <strong>/27</strong> o
+                <strong>/30</strong>, para indicar el tamaño del prefijo
+                de red.
+            </p>
+
+            <p>
+                Cuanto mayor sea el prefijo, menor será el número de
+                direcciones disponibles dentro de la red.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             OTRAS HERRAMIENTAS
+             ===================================================== -->
+
+        <section class="card related-tools">
+
+            <h2>Otras herramientas</h2>
+
+            <p class="section-description">
+                Más calculadoras para redes y sistemas.
+            </p>
+
+            <a
+                href="../"
+                class="related-tool-link"
+            >
+                Calculadora de almacenamiento para cámaras
+            </a>
+
+        </section>
+
+
+        <!-- =====================================================
+             PIE
+             ===================================================== -->
+
+        <footer class="footer">
+
+            <p>
+                Calculadora gratuita de subredes IPv4 y CIDR.
+            </p>
+
+        </footer>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
