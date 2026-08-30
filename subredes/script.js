@@ -31,9 +31,6 @@ const exampleButtons = document.querySelectorAll(".example-button");
 
 /**
  * Convierte una dirección IPv4 a un número entero sin signo.
- *
- * Ejemplo:
- * 192.168.1.1 -> 3232235777
  */
 function ipToNumber(ip) {
     const octets = ip.split(".").map(Number);
@@ -64,6 +61,7 @@ function numberToIp(number) {
  * Valida una dirección IPv4.
  */
 function isValidIPv4(ip) {
+
     if (typeof ip !== "string") {
         return false;
     }
@@ -75,6 +73,7 @@ function isValidIPv4(ip) {
     }
 
     return parts.every((part) => {
+
         if (part === "") {
             return false;
         }
@@ -94,13 +93,16 @@ function isValidIPv4(ip) {
  * Valida el prefijo CIDR.
  */
 function isValidCIDR(cidr) {
+
     if (cidr === "") {
         return false;
     }
 
     const number = Number(cidr);
 
-    return Number.isInteger(number) && number >= 0 && number <= 32;
+    return Number.isInteger(number) &&
+           number >= 0 &&
+           number <= 32;
 }
 
 
@@ -108,6 +110,7 @@ function isValidCIDR(cidr) {
  * Genera la máscara de subred a partir del CIDR.
  */
 function cidrToMask(cidr) {
+
     if (cidr === 0) {
         return 0;
     }
@@ -142,8 +145,10 @@ function getWildcard(mask) {
  */
 function getNetworkType(ipNumber, cidr) {
 
-    /* /0 representa todo el espacio IPv4 y no debe clasificarse
-       según la IP introducida. */
+    /*
+     * /0 representa todo el espacio IPv4 y no debe clasificarse
+     * según la IP introducida.
+     */
     if (cidr === 0) {
         return "Pública";
     }
@@ -256,9 +261,10 @@ function getNetworkType(ipNumber, cidr) {
 
 /**
  * Determina si una red tiene un uso especial y no debe
- * mostrar hosts utilizables como una red convencional.
+ * mostrar hosts convencionales.
  */
 function isSpecialNetwork(type) {
+
     return [
         "Loopback",
         "Link-local",
@@ -270,28 +276,65 @@ function isSpecialNetwork(type) {
 
 
 /**
- * Devuelve una explicación para redes especiales.
+ * Devuelve una explicación para redes especiales,
+ * incluyendo /31 y /32.
  */
-function getSpecialNetworkMessage(type) {
+function getSpecialNetworkMessage(type, cidr) {
+
+    /* -----------------------------------------------------
+       /31
+       RFC 3021
+       ----------------------------------------------------- */
+
+    if (cidr === 31) {
+
+        return "Red /31: según RFC 3021, las dos direcciones pueden utilizarse como extremos de un enlace punto a punto. Por eso se muestran 2 hosts utilizables y no se reserva una dirección de red ni una de broadcast como en una subred convencional.";
+    }
+
+
+    /* -----------------------------------------------------
+       /32
+       ----------------------------------------------------- */
+
+    if (cidr === 32) {
+
+        return "Red /32: representa una única dirección IPv4. Se utiliza habitualmente para identificar un host o una interfaz concreta.";
+    }
+
+
+    /* -----------------------------------------------------
+       REDES ESPECIALES
+       ----------------------------------------------------- */
 
     switch (type) {
 
         case "Loopback":
+
             return "Red Loopback: se utiliza para la comunicación interna del propio dispositivo. No se aplica el concepto convencional de hosts utilizables.";
 
+
         case "Link-local":
+
             return "Red Link-local: se utiliza para configuración y comunicación local automática. No se aplica el concepto convencional de hosts utilizables.";
 
+
         case "CGNAT":
+
             return "Red CGNAT: rango compartido por operadores para traducir múltiples clientes mediante NAT. No es una red privada RFC 1918.";
 
+
         case "Multicast":
+
             return "Red Multicast: las direcciones representan grupos multicast y no hosts IPv4 convencionales.";
 
+
         case "Reservada":
+
             return "Red reservada: este rango está reservado para usos especiales y no debe tratarse como una red IPv4 convencional.";
 
+
         default:
+
             return "";
     }
 }
@@ -301,38 +344,45 @@ function getSpecialNetworkMessage(type) {
    MENSAJE PARA REDES ESPECIALES
    ========================================================= */
 
-function showSpecialNetworkMessage(type) {
+function showSpecialNetworkMessage(type, cidr) {
 
+    /*
+     * Primero intentamos utilizar el elemento que ya existe
+     * en el HTML.
+     */
     let notice = document.getElementById(
-        "specialNetworkNotice"
+        "specialNetworkNote"
     );
 
 
-    /* -----------------------------------------------------
-       Crear aviso si todavía no existe
-       ----------------------------------------------------- */
+    /*
+     * Compatibilidad con la versión anterior.
+     */
+    if (!notice) {
 
+        notice = document.getElementById(
+            "specialNetworkNotice"
+        );
+    }
+
+
+    /*
+     * Crear aviso si todavía no existe.
+     */
     if (!notice) {
 
         notice = document.createElement("div");
 
-        notice.id = "specialNetworkNotice";
+        notice.id = "specialNetworkNote";
 
-        notice.style.marginTop = "16px";
-        notice.style.padding = "14px 16px";
-        notice.style.borderRadius = "8px";
-        notice.style.background = "#f1f5f9";
-        notice.style.border = "1px solid #dbe3ec";
-        notice.style.color = "#17324d";
-        notice.style.fontSize = "14px";
-        notice.style.lineHeight = "1.5";
+        notice.className = "special-network-note";
 
         resultsSection.appendChild(notice);
     }
 
 
     notice.textContent =
-        getSpecialNetworkMessage(type);
+        getSpecialNetworkMessage(type, cidr);
 
     notice.hidden = false;
 }
@@ -343,9 +393,9 @@ function showSpecialNetworkMessage(type) {
  */
 function hideSpecialNetworkMessage() {
 
-    const notice = document.getElementById(
-        "specialNetworkNotice"
-    );
+    const notice =
+        document.getElementById("specialNetworkNote") ||
+        document.getElementById("specialNetworkNotice");
 
     if (notice) {
         notice.hidden = true;
@@ -396,7 +446,8 @@ function calculateSubnet() {
        OBTENER DATOS
        ----------------------------------------------------- */
 
-    const ip = ipInput.value.trim();
+    const ip =
+        ipInput.value.trim();
 
     const cidrValue =
         cidrInput.value.trim();
@@ -479,7 +530,6 @@ function calculateSubnet() {
     const type =
         getNetworkType(ipNumber, cidr);
 
-
     const special =
         isSpecialNetwork(type);
 
@@ -501,7 +551,6 @@ function calculateSubnet() {
      * Para redes especiales no mostramos hosts
      * convencionales.
      */
-
     if (special) {
 
         usable = null;
@@ -513,9 +562,8 @@ function calculateSubnet() {
     } else {
 
         /*
-         * Redes normales /0 hasta /30
+         * Redes normales /0 hasta /30.
          */
-
         if (cidr <= 30) {
 
             usable =
@@ -534,7 +582,6 @@ function calculateSubnet() {
          * /31 puede utilizar las dos direcciones
          * en enlaces punto a punto.
          */
-
         else if (cidr === 31) {
 
             usable = 2;
@@ -550,7 +597,6 @@ function calculateSubnet() {
         /*
          * /32 representa una única dirección.
          */
-
         else if (cidr === 32) {
 
             usable = 1;
@@ -677,9 +723,21 @@ function calculateSubnet() {
        Aviso de red especial
        ----------------------------------------------------- */
 
-    if (special) {
+    /*
+     * /31 y /32 también necesitan explicación,
+     * aunque no sean "redes especiales" en el sentido
+     * de clasificación de IPv4.
+     */
+    if (
+        special ||
+        cidr === 31 ||
+        cidr === 32
+    ) {
 
-        showSpecialNetworkMessage(type);
+        showSpecialNetworkMessage(
+            type,
+            cidr
+        );
 
     } else {
 
@@ -697,7 +755,6 @@ function calculateSubnet() {
     /*
      * Desplazamos hacia los resultados.
      */
-
     resultsSection.scrollIntoView({
         behavior: "smooth",
         block: "start"
@@ -708,6 +765,7 @@ function calculateSubnet() {
 /* =========================================================
    EVENTOS
    ========================================================= */
+
 
 /**
  * Botón CALCULAR.
@@ -726,7 +784,6 @@ ipInput.addEventListener(
     (event) => {
 
         if (event.key === "Enter") {
-
             calculateSubnet();
         }
     }
@@ -741,7 +798,6 @@ cidrInput.addEventListener(
     (event) => {
 
         if (event.key === "Enter") {
-
             calculateSubnet();
         }
     }
@@ -754,24 +810,27 @@ cidrInput.addEventListener(
 
 exampleButtons.forEach((button) => {
 
-    button.addEventListener("click", () => {
+    button.addEventListener(
+        "click",
+        () => {
 
-        const ip =
-            button.dataset.ip;
+            const ip =
+                button.dataset.ip;
 
-        const cidr =
-            button.dataset.cidr;
-
-
-        ipInput.value =
-            ip;
-
-        cidrInput.value =
-            cidr;
+            const cidr =
+                button.dataset.cidr;
 
 
-        calculateSubnet();
-    });
+            ipInput.value =
+                ip;
+
+            cidrInput.value =
+                cidr;
+
+
+            calculateSubnet();
+        }
+    );
 });
 
 
