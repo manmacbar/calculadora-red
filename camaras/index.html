@@ -1,1 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
 
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <!-- SEO -->
+    <title>
+        Calculadora de almacenamiento para cámaras de seguridad | CCTV
+    </title>
+
+    <meta
+        name="description"
+        content="Calcula cuánto almacenamiento necesitas para cámaras de seguridad, CCTV o cámaras IP según número de cámaras, resolución, bitrate, FPS y días de grabación."
+    >
+
+    <meta
+        name="robots"
+        content="index, follow"
+    >
+
+    <meta
+        name="author"
+        content="Calculadora de almacenamiento CCTV"
+    >
+
+
+    <!-- CSS -->
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <main class="contenedor">
+
+
+        <!-- =====================================
+             CABECERA
+             ===================================== -->
+
+        <header>
+
+            <h1>
+                Calculadora de almacenamiento para cámaras
+            </h1>
+
+            <p class="introduccion">
+
+                Calcula cuánto espacio necesitas para almacenar
+                las grabaciones de tus cámaras de seguridad,
+                CCTV o cámaras IP.
+
+            </p>
+
+        </header>
+
+
+        <!-- =====================================
+             CALCULADORA
+             ===================================== -->
+
+
+        <!-- NÚMERO DE CÁMARAS -->
+
+        <label for="camaras">
+            Número de cámaras:
+        </label>
+
+        <input
+            type="number"
+            id="camaras"
+            min="1"
+        >
+
+        <br><br>
+
+
+        <!-- TIPO DE GRABACIÓN -->
+
+        <label for="tipoGrabacion">
+            Tipo de grabación:
+        </label>
+
+        <select id="tipoGrabacion">
+
+            <option value="continua">
+                Grabación continua
+            </option>
+
+            <option value="movimiento">
+                Grabación por movimiento
+            </option>
+
+        </select>
+
+        <br><br>
+
+
+        <!-- HORAS DE GRABACIÓN -->
+
+        <div id="horasGrabacion">
+
+            <label for="horas">
+                Horas equivalentes de grabación al día:
+            </label>
+
+            <input
+                type="number"
+                id="horas"
+                min="1"
+                max="24"
+                disabled
+            >
+
+        </div>
+
+        <br>
+
+
+        <!-- DÍAS -->
+
+        <label for="dias">
+            Días de almacenamiento:
+        </label>
+
+        <input
+            type="number"
+            id="dias"
+            min="1"
+        >
+
+        <br><br>
+
+
+        <!-- BITRATE -->
+
+        <label for="tipoBitrate">
+            ¿Conoces el bitrate de tu cámara?
+        </label>
+
+        <select id="tipoBitrate">
+
+            <option value="conocido">
+                Sí, lo conozco
+            </option>
+
+            <option value="estimado">
+                No, quiero una estimación
+            </option>
+
+        </select>
+
+        <br><br>
+
+
+        <!-- BITRATE CONOCIDO -->
+
+        <div id="bitrateConocido">
+
+            <label for="bitrate">
+                Bitrate por cámara (Mbps):
+            </label>
+
+            <input
+                type="number"
+                id="bitrate"
+                min="0.1"
+                step="0.1"
+            >
+
+        </div>
+
+
+        <!-- =====================================
+             BITRATE ESTIMADO
+             ===================================== -->
+
+        <div
+            id="bitrateEstimado"
+            style="display: none;"
+        >
+
+
+            <!-- RESOLUCIÓN -->
+
+            <label for="resolucion">
+                Resolución:
+            </label>
+
+            <select id="resolucion">
+
+                <option value="1080p">
+                    1080p
+                </option>
+
+                <option value="2k">
+                    2K
+                </option>
+
+                <option value="4mp">
+                    4 MP
+                </option>
+
+                <option value="5mp">
+                    5 MP
+                </option>
+
+                <option value="4k">
+                    4K
+                </option>
+
+            </select>
+
+            <br><br>
+
+
+            <!-- CODEC -->
+
+            <label for="codec">
+                Codec:
+            </label>
+
+            <select id="codec">
+
+                <option value="h264">
+                    H.264
+                </option>
+
+                <option value="h265">
+                    H.265
+                </option>
+
+            </select>
+
+            <br><br>
+
+
+            <!-- FPS -->
+
+            <label for="fps">
+                FPS (fotogramas por segundo):
+            </label>
+
+            <select id="fps">
+
+                <option value="10">
+                    10 FPS
+                </option>
+
+                <option
+                    value="15"
+                    selected
+                >
+                    15 FPS
+                </option>
+
+                <option value="20">
+                    20 FPS
+                </option>
+
+                <option value="25">
+                    25 FPS
+                </option>
+
+                <option value="30">
+                    30 FPS
+                </option>
+
+            </select>
+
+
+        </div>
+
+
+        <br>
+
+
+        <!-- =====================================
+             BOTONES
+             ===================================== -->
+
+        <button
+            id="calcular"
+            type="button"
+        >
+            CALCULAR
+        </button>
+
+
+        <button
+            id="compartir"
+            type="button"
+        >
+            🔗 COMPARTIR CÁLCULO
+        </button>
+
+
+        <p id="mensajeCompartir"></p>
+
+
+        <!-- =====================================
+             RESULTADO
+             ===================================== -->
+
+        <div
+            id="resultado"
+            class="resultado"
+        ></div>
+
+
+        <!-- =====================================
+             AYUDA
+             ===================================== -->
+
+        <section class="ayuda">
+
+            <h2>
+                ¿Qué significa cada dato?
+            </h2>
+
+
+            <div class="ayuda-item">
+
+                <strong>
+                    Bitrate
+                </strong>
+
+                <p>
+
+                    Es la cantidad de datos que genera
+                    la cámara cada segundo. Cuanto mayor
+                    sea el bitrate, más almacenamiento
+                    necesitarás.
+
+                </p>
+
+            </div>
+
+
+            <div class="ayuda-item">
+
+                <strong>
+                    Resolución
+                </strong>
+
+                <p>
+
+                    Indica el nivel de detalle de la imagen.
+                    Una resolución mayor normalmente requiere
+                    más almacenamiento.
+
+                </p>
+
+            </div>
+
+
+            <div class="ayuda-item">
+
+                <strong>
+                    Codec
+                </strong>
+
+                <p>
+
+                    Es el método utilizado para comprimir
+                    el vídeo. H.265 suele necesitar menos
+                    almacenamiento que H.264 para una calidad
+                    similar, aunque depende de la configuración.
+
+                </p>
+
+            </div>
+
+
+            <div class="ayuda-item">
+
+                <strong>
+                    FPS
+                </strong>
+
+                <p>
+
+                    Son los fotogramas por segundo.
+                    Más FPS significa más imágenes por segundo
+                    y puede aumentar el bitrate necesario.
+
+                </p>
+
+            </div>
+
+
+            <div class="ayuda-item">
+
+                <strong>
+                    Grabación por movimiento
+                </strong>
+
+                <p>
+
+                    En lugar de grabar continuamente,
+                    la cámara graba cuando detecta actividad.
+                    Introduce una estimación de las horas
+                    equivalentes de grabación al día.
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================
+             INFORMACIÓN SEO
+             ===================================== -->
+
+        <section class="contenido-seo">
+
+            <h2>
+                ¿Cuánto almacenamiento necesita una cámara de seguridad?
+            </h2>
+
+            <p>
+
+                El espacio necesario para almacenar grabaciones
+                de videovigilancia depende principalmente del número
+                de cámaras, el bitrate, la resolución, los FPS y el
+                tiempo durante el que quieras conservar las grabaciones.
+
+            </p>
+
+            <p>
+
+                Una cámara que graba continuamente durante 24 horas
+                necesitará mucho más almacenamiento que una cámara
+                configurada para grabar únicamente cuando detecta
+                movimiento.
+
+            </p>
+
+
+            <h2>
+                ¿Qué influye en el almacenamiento de una cámara IP?
+            </h2>
+
+            <p>
+
+                El bitrate es uno de los factores más importantes.
+                Cuantos más datos genere la cámara por segundo,
+                mayor será el espacio necesario para conservar
+                las grabaciones.
+
+            </p>
+
+            <p>
+
+                También influyen la resolución, el codec utilizado,
+                los fotogramas por segundo y las características
+                de la escena. Por eso, cuando no conoces el bitrate
+                exacto de tu cámara, esta calculadora proporciona
+                una estimación de referencia.
+
+            </p>
+
+
+            <h2>
+                ¿H.264 o H.265 para ahorrar almacenamiento?
+            </h2>
+
+            <p>
+
+                H.265 puede conseguir una compresión más eficiente
+                que H.264 en determinadas condiciones, por lo que
+                puede reducir el almacenamiento necesario para una
+                calidad de imagen comparable.
+
+            </p>
+
+            <p>
+
+                Sin embargo, el resultado real depende de la cámara,
+                la configuración de codificación y la complejidad
+                de la escena.
+
+            </p>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =====================================
+         JAVASCRIPT
+         ===================================== -->
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
