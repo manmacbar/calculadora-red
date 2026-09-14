@@ -1,168 +1,188 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Calculadoras de Red | IPv4, Subredes y Cámaras</title>
-
-    <meta
-        name="description"
-        content="Herramientas online gratuitas para redes: calculadora de subredes IPv4, CIDR y calculadora de cámaras de videovigilancia."
-    >
-
-    <meta
-        name="keywords"
-        content="calculadora redes, calculadora subredes, IPv4, CIDR, subnet calculator, calculadora cámaras, videovigilancia"
-    >
-
-    <meta name="robots" content="index, follow">
-
-    <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Calculadora Red | Herramientas para Redes</title>
+<meta name="description" content="Calculadoras online gratuitas para redes informáticas, videovigilancia, subredes, cámaras IP y ancho de banda.">
+<link rel="canonical" href="https://calculadora-red.pages.dev/">
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f6fa;
+    color:#172033;
+    line-height:1.5;
+}
+.wrap{
+    max-width:1050px;
+    margin:0 auto;
+    padding:24px 18px 50px;
+}
+a{color:#1f5fd1}
+.brand{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    color:#1f5fd1;
+    text-decoration:none;
+    font-weight:700;
+    margin-bottom:18px;
+}
+.brand-icon{
+    width:30px;
+    height:30px;
+    border-radius:8px;
+    background:#2864d7;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:13px;
+    font-weight:700;
+}
+h1{
+    margin:0 0 8px;
+    font-size:36px;
+    line-height:1.2;
+    color:#0d1424;
+}
+.intro{
+    margin:0 0 34px;
+    color:#536887;
+    font-size:16px;
+}
+.section-title{
+    margin:0 0 4px;
+    font-size:22px;
+    color:#101827;
+}
+.section-text{
+    margin:0 0 20px;
+    color:#536887;
+}
+.cards{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+}
+.card{
+    background:#fff;
+    border:1px solid #dfe4ec;
+    border-radius:14px;
+    padding:22px;
+    box-shadow:0 8px 24px rgba(28,48,82,.06);
+}
+.tool-badge{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:54px;
+    height:54px;
+    border-radius:12px;
+    background:#edf4ff;
+    color:#2864d7;
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:16px;
+}
+.card h2{
+    margin:0 0 10px;
+    font-size:19px;
+    line-height:1.3;
+    color:#101827;
+}
+.card p{
+    margin:0;
+    min-height:72px;
+    color:#536887;
+    font-size:14px;
+}
+.card-link{
+    display:inline-block;
+    margin-top:18px;
+    font-weight:700;
+    text-decoration:none;
+}
+.info{
+    margin-top:22px;
+}
+.info h2{
+    margin:0 0 10px;
+    font-size:20px;
+}
+.info p{
+    margin:0 0 10px;
+    color:#536887;
+    font-size:14px;
+}
+footer{
+    text-align:center;
+    margin-top:28px;
+    color:#536887;
+    font-size:13px;
+}
+@media(max-width:850px){
+    .cards{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+    .wrap{padding:20px 14px 40px}
+    h1{font-size:30px}
+    .cards{grid-template-columns:1fr}
+    .card p{min-height:0}
+}
+</style>
 </head>
-
 <body>
+<div class="wrap">
 
-    <main class="container">
+<a class="brand" href="./">
+    <span class="brand-icon">↔</span>
+    <span>Calculadora Red</span>
+</a>
 
-        <!-- CABECERA -->
+<h1>Herramientas para Redes</h1>
+<p class="intro">Calculadoras online gratuitas para técnicos, administradores de sistemas y profesionales de redes.</p>
 
-        <header class="page-header">
+<section>
+    <h2 class="section-title">Calculadoras</h2>
+    <p class="section-text">Selecciona una herramienta para empezar.</p>
 
-            <div class="brand">
-                <div class="brand-icon">⌁</div>
+    <div class="cards">
 
-                <span>Calculadora Red</span>
-            </div>
+        <article class="card">
+            <div class="tool-badge">IPv4</div>
+            <h2>Calculadora de Subredes</h2>
+            <p>Calcula dirección de red, máscara, wildcard, broadcast, rango de hosts y número de direcciones.</p>
+            <a class="card-link" href="./subredes/">Abrir calculadora →</a>
+        </article>
 
-            <h1>Herramientas para Redes</h1>
+        <article class="card">
+            <div class="tool-badge">CCTV</div>
+            <h2>Calculadora de Cámaras</h2>
+            <p>Calcula las necesidades de almacenamiento y otros parámetros para sistemas de videovigilancia.</p>
+            <a class="card-link" href="./camaras/">Abrir calculadora →</a>
+        </article>
 
-            <p>
-                Calculadoras online gratuitas para técnicos,
-                administradores de sistemas y profesionales de redes.
-            </p>
+        <article class="card">
+            <div class="tool-badge">Mbps</div>
+            <h2>Calculadora de Ancho de Banda</h2>
+            <p>Calcula el tráfico necesario para cámaras IP según número de cámaras, bitrate, resolución, FPS y códec.</p>
+            <a class="card-link" href="./ancho-banda/">Abrir calculadora →</a>
+        </article>
 
-        </header>
+    </div>
+</section>
 
+<section class="card info">
+    <h2>Herramientas gratuitas de redes</h2>
+    <p>Este proyecto reúne herramientas sencillas para realizar cálculos habituales relacionados con redes informáticas y sistemas de videovigilancia.</p>
+    <p>Estamos incorporando nuevas calculadoras y herramientas progresivamente.</p>
+</section>
 
-        <!-- HERRAMIENTAS -->
+<footer>© 2026 Calculadora Red · Herramientas gratuitas para redes</footer>
 
-        <section class="tools-section">
-
-            <h2>Calculadoras</h2>
-
-            <p class="section-description">
-                Selecciona una herramienta para empezar.
-            </p>
-
-
-            <div class="tools-grid">
-
-
-                <!-- SUBREDES -->
-
-                <a
-                    href="subredes/index.html"
-                    class="tool-card"
-                >
-
-                    <div class="tool-icon">
-                        IPv4
-                    </div>
-
-                    <div class="tool-content">
-
-                        <h3>
-                            Calculadora de Subredes
-                        </h3>
-
-                        <p>
-                            Calcula dirección de red, máscara,
-                            wildcard, broadcast, rango de hosts
-                            y número de direcciones.
-                        </p>
-
-                        <span class="tool-link">
-                            Abrir calculadora →
-                        </span>
-
-                    </div>
-
-                </a>
-
-
-                <!-- CÁMARAS -->
-
-                <a
-                    href="camaras/index.html"
-                    class="tool-card"
-                >
-
-                    <div class="tool-icon">
-                        CCTV
-                    </div>
-
-                    <div class="tool-content">
-
-                        <h3>
-                            Calculadora de Cámaras
-                        </h3>
-
-                        <p>
-                            Calcula las necesidades de almacenamiento
-                            y otros parámetros para sistemas de
-                            videovigilancia.
-                        </p>
-
-                        <span class="tool-link">
-                            Abrir calculadora →
-                        </span>
-
-                    </div>
-
-                </a>
-
-
-            </div>
-
-        </section>
-
-
-        <!-- INFORMACIÓN -->
-
-        <section class="info-card">
-
-            <h2>Herramientas gratuitas de redes</h2>
-
-            <p>
-                Este proyecto reúne herramientas sencillas para
-                realizar cálculos habituales relacionados con redes
-                informáticas y sistemas de videovigilancia.
-            </p>
-
-            <p>
-                Estamos incorporando nuevas calculadoras y
-                herramientas progresivamente.
-            </p>
-
-        </section>
-
-
-        <!-- FOOTER -->
-
-        <footer class="footer">
-
-            <p>
-                © 2026 Calculadora Red · Herramientas gratuitas para redes
-            </p>
-
-        </footer>
-
-    </main>
-
-
-    <script src="script.js"></script>
-
+</div>
 </body>
 </html>
