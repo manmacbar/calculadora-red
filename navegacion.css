@@ -1,0 +1,47 @@
+
+/* Navegación común de Calculadora-Red */
+.cr-nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+    align-items:center;
+    margin:0 0 18px;
+}
+.cr-nav a{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:8px 11px;
+    border:1px solid #d9e1ec;
+    border-radius:7px;
+    background:#fff;
+    color:#1f5fd1;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:700;
+    line-height:1.25;
+    white-space:nowrap;
+    box-shadow:0 1px 2px rgba(20,40,70,.03);
+}
+.cr-nav a:hover{
+    border-color:#b9cdf1;
+    background:#f7faff;
+}
+.cr-nav a.cr-active{
+    background:#2864d7;
+    border-color:#2864d7;
+    color:#fff;
+}
+.cr-nav a.cr-active:hover{
+    background:#1f55bc;
+    border-color:#1f55bc;
+}
+@media(max-width:760px){
+    .cr-nav{
+        gap:7px;
+    }
+    .cr-nav a{
+        font-size:12px;
+        padding:7px 9px;
+    }
+}
