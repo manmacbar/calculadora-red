@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Calculadora de Ancho de Banda para Cámaras IP | CCTV</title>
+<meta name="description" content="Calcula el ancho de banda de cámaras IP y CCTV según cámaras, bitrate, resolución, FPS y códec. Incluye margen de red, MB/s y GB por hora.">
+<link rel="canonical" href="https://calculadora-red.pages.dev/ancho-banda/">
+<meta name="robots" content="index,follow">
+<meta property="og:title" content="Calculadora de Ancho de Banda para Cámaras IP">
+<meta property="og:description" content="Calcula el tráfico de vídeo de un sistema CCTV y estima el ancho de banda y almacenamiento por hora.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://calculadora-red.pages.dev/ancho-banda/">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebApplication",
+  "name":"Calculadora de Ancho de Banda para Cámaras IP",
+  "url":"https://calculadora-red.pages.dev/ancho-banda/",
+  "applicationCategory":"UtilitiesApplication",
+  "operatingSystem":"All",
+  "description":"Calculadora gratuita para estimar el ancho de banda de cámaras IP y CCTV según número de cámaras, bitrate, resolución, FPS y códec.",
+  "isAccessibleForFree":true,
+  "inLanguage":"es"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"BreadcrumbList",
+  "itemListElement":[
+    {"@type":"ListItem","position":1,"name":"Inicio","item":"https://calculadora-red.pages.dev/"},
+    {"@type":"ListItem","position":2,"name":"Calculadora de ancho de banda","item":"https://calculadora-red.pages.dev/ancho-banda/"}
+  ]
+}
+</script>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="../">← Calculadora-Red</a>
+
+<header>
+<h1>Calculadora de Ancho de Banda para Cámaras IP</h1>
+<p>Calcula el tráfico de vídeo de un sistema CCTV y estima el ancho de banda de red y los GB de vídeo generados por hora.</p>
+</header>
+
+<main class="grid">
+<section class="card">
+<h2>Configura tu sistema</h2>
+
+<label for="cams">Número de cámaras</label>
+<input id="cams" type="number" min="1" max="1000" step="1" inputmode="numeric" placeholder="Ej.: 4">
+<div class="field-error" id="camsError"></div>
+
+<label for="mode">Cálculo del bitrate</label>
+<select id="mode">
+<option value="" selected disabled>Selecciona un modo</option>
+<option value="auto">Automático según resolución, FPS y códec</option>
+<option value="manual">Usar bitrate manual</option>
+</select>
+<div id="autoBox" style="display:none">
+<label for="resolution">Resolución</label>
+<select id="resolution">
+<option value="" selected disabled>Selecciona una resolución</option>
+<option value="1">1 MP (720p)</option>
+<option value="2">2 MP (1080p / Full HD)</option>
+<option value="3">3 MP</option>
+<option value="4">4 MP</option>
+<option value="5">5 MP</option>
+<option value="6">6 MP</option>
+<option value="8">8 MP (4K)</option>
+<option value="12">12 MP</option>
+</select>
+
+<div class="row">
+<div>
+<label for="fps">FPS</label>
+<input id="fps" type="number" min="1" max="120" step="1" inputmode="numeric" placeholder="Ej.: 15">
+<div class="field-error" id="fpsError"></div>
+</div>
+<div>
+<label for="codec">Códec</label>
+<select id="codec">
+<option value="" selected disabled>Selecciona un códec</option>
+<option value="h264">H.264</option>
+<option value="h265">H.265 / HEVC</option>
+<option value="h265p">H.265+ (estimación)</option>
+</select>
+</div>
+</div>
+
+<div class="hint">Estos datos se usan únicamente para estimar el bitrate por cámara.</div>
+</div>
+
+<div id="manualBox" style="display:none">
+<label for="bitrate">Bitrate por cámara (Mbps)</label>
+<input id="bitrate" type="number" min="0.1" max="100" step="0.1" inputmode="decimal" placeholder="Ej.: 2.5">
+<div class="field-error" id="bitrateError"></div>
+<div class="hint">Si conoces el bitrate real configurado en la cámara, es preferible introducirlo.</div>
+</div>
+
+<div id="autoHint" class="hint">El bitrate automático es una estimación. Resolución, FPS y códec afectan al resultado.</div>
+
+<label for="overhead">Margen de red</label>
+<select id="overhead">
+<option value="" selected disabled>Selecciona un margen</option>
+<option value="1.10">10 %</option>
+<option value="1.15">15 %</option>
+<option value="1.20">20 %</option>
+</select>
+
+<button id="calc" type="button">Calcular ancho de banda</button>
+</section>
+
+<section class="card">
+<h2>Resultado</h2>
+<div class="result">
+<div class="main-result">
+<div class="big" id="total">—</div>
+<div class="unit">Mbps aproximados con margen</div>
+</div>
+
+<div class="stats">
+<div class="stat"><span>Bitrate total de vídeo</span><b id="raw">—</b></div>
+<div class="stat"><span>Por cámara</span><b id="per">—</b></div>
+<div class="stat"><span>MB/s aproximados</span><b id="mbytes">—</b></div>
+<div class="stat"><span>GB por hora</span><b id="gbhour">—</b></div>
+</div>
+
+<div class="recommendation" id="network">Introduce los datos y pulsa «Calcular ancho de banda».</div>
+<div class="warning">La cifra es una estimación. El bitrate real depende de la escena, movimiento, calidad, VBR/CBR, GOP y configuración de la cámara.</div>
+</div>
+</section>
+</main>
+
+<article class="card article">
+<h2>¿Para qué sirve esta calculadora de ancho de banda de cámaras IP?</h2>
+<p>Esta herramienta sirve para estimar cuánto tráfico de vídeo puede generar un sistema de cámaras IP y comprobar si la capacidad de la red es suficiente. Es útil al dimensionar una instalación CCTV, elegir switches y uplinks o comprobar el tráfico que llegará al NVR.</p>
+<p>Puedes introducir el <strong>bitrate real de cada cámara</strong> si lo conoces. Si todavía no lo tienes, el modo automático calcula una estimación a partir de la resolución, los FPS y el códec.</p>
+
+<h2>¿Cómo se calcula el ancho de banda de las cámaras?</h2>
+<p>En modo manual, el cálculo básico es:</p>
+<p class="formula"><strong>Bitrate total = número de cámaras × bitrate por cámara</strong></p>
+<p>Después se aplica el margen elegido para obtener una referencia de capacidad de red:</p>
+<p class="formula"><strong>Ancho de banda recomendado = bitrate total × (1 + margen)</strong></p>
+<p>Por ejemplo, 10 cámaras a 5 Mbps generan 50 Mbps de vídeo. Con un margen del 10 %, la red debería reservar aproximadamente 55 Mbps para ese tráfico.</p>
+
+<h2>¿Qué influye en el bitrate de una cámara IP?</h2>
+<ul>
+<li><strong>Resolución:</strong> una imagen con más píxeles suele necesitar más datos.</li>
+<li><strong>FPS:</strong> aumentar los fotogramas por segundo incrementa el volumen de vídeo transmitido.</li>
+<li><strong>Códec:</strong> H.264, H.265 y H.265+ pueden producir bitrates diferentes para una calidad de imagen similar.</li>
+<li><strong>Escena y movimiento:</strong> una escena con mucho movimiento suele necesitar más bitrate que una escena estática.</li>
+<li><strong>Configuración:</strong> VBR/CBR, calidad, GOP y otros parámetros de la cámara también afectan al tráfico real.</li>
+</ul>
+
+<h2>¿Es mejor usar bitrate manual o automático?</h2>
+<p>Si conoces el bitrate configurado en la cámara o puedes consultarlo en su interfaz, <strong>usa el modo manual</strong>. Es la referencia más útil para una instalación concreta. El modo automático está pensado para obtener una estimación cuando todavía no se conoce el bitrate real.</p>
+
+<h2>¿El margen de red aumenta el almacenamiento?</h2>
+<p>No. El margen se aplica al <strong>ancho de banda recomendado para la red</strong>. La estimación de GB por hora utiliza el bitrate de vídeo sin ese margen, porque el margen no significa que las cámaras estén grabando más datos.</p>
+
+<h2>¿Qué switch necesito para las cámaras?</h2>
+<p>No basta con mirar solamente el bitrate total de las cámaras. También hay que revisar el tráfico hacia el NVR, visualización en directo, substreams, acceso remoto y los uplinks entre switches. Además, el ancho de banda de red y la alimentación PoE son cálculos diferentes.</p>
+<p>Una instalación con muchas cámaras puede necesitar enlaces de mayor capacidad aunque cada cámara individual consuma pocos Mbps. Por eso conviene revisar el tráfico agregado de cada enlace, no solo el puerto de cada cámara.</p>
+
+<h2>Preguntas frecuentes</h2>
+<h3>¿Cuánto ancho de banda consume una cámara IP?</h3>
+<p>No existe una cifra única. Depende principalmente de la resolución, FPS, códec, calidad, escena y configuración de bitrate. Si conoces el bitrate configurado, esa cifra es la mejor entrada para calcular el consumo.</p>
+
+<h3>¿H.265 consume menos ancho de banda que H.264?</h3>
+<p>En general, H.265 puede conseguir una compresión más eficiente que H.264 para una calidad comparable. Aun así, el bitrate real depende de la cámara y de su configuración, por lo que no conviene asumir un valor fijo para todas las instalaciones.</p>
+
+<h3>¿Cuánto almacenamiento necesito por hora?</h3>
+<p>Depende del bitrate total de vídeo. Como referencia, el bitrate se convierte a MB/s dividiéndolo entre 8 y después se puede estimar el volumen generado durante una hora. Esta calculadora muestra directamente una estimación en GB/h.</p>
+
+<div class="links">
+<a href="../camaras/">Calculadora de almacenamiento de cámaras →</a>
+<a href="../subredes/">Calculadora de subredes →</a>
+</div>
+</article>
+
+<footer>Calculadora-Red · Herramientas gratuitas para redes y videovigilancia</footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
